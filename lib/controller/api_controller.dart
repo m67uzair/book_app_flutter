@@ -1,21 +1,28 @@
 import 'dart:convert';
-
-import 'package:e_book/providers/auth_provider.dart';
+import 'package:e_book/models/book_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+List<BookModel> _books = [];
+
 class ApiController {
-  Future<void> getBookShelves(String? accessToken) async {
-    String apiKey = 'AIzaSyARMBgu4G9tunek3XrAPMW90QkA5yv5DwE';
-    String url = 'https://www.googleapis.com/books/v1/volumes?q=*&maxResults=40&key=$apiKey';
 
+  Future<List<BookModel>> getRecentBooks() async {
+
+    String url = 'https://www.dbooks.org/api/recent';
+    print("gaaaaaaaaaaado");
     final response = await http.get(Uri.parse(url));
-
+    print("yes${response.statusCode}");
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body.toString());
-
-      print(data);
+        print(data.toString());
+      for (Map i in data['books']) {
+        _books.add(BookModel.fromJson(i));
+      }
     } else {
-      print("pado");
+      print("paaaaaaaaaaaado");
+      Fluttertoast.showToast(msg: "Error Code: ${response.statusCode.toString()}");
     }
+    return _books;
   }
 }
