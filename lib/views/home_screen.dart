@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_contants.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/models/book_model.dart';
+import 'package:e_book/widgets/image_app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -40,14 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Stack(children: [
                 Image.asset(
                   "assets/images/bookshelf.jpeg",
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.2,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  width: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,
                 ),
                 Positioned(
@@ -58,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: SizedBox(
                       width: 140,
                       child: Text(
-                        "book jungle",
+                        'book\njungle',
                         style: kTitleStyle,
                         maxLines: 2,
                       ),
@@ -73,7 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const Expanded(
                       child: AlertDialog(
                         elevation: 0,
-                        content: Center(child: CircularProgressIndicator(),),
+                        content: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
                     );
                   } else {
@@ -85,51 +82,47 @@ class _HomeScreenState extends State<HomeScreen> {
                           slivers: [
                             SliverToBoxAdapter(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 20),
-                                  child: Text(
-                                    "Recents",
-                                    style: kTitleStyle.copyWith(color: Colors.black, fontSize: 25),
-                                  ),
-                                )),
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              child: Text(
+                                "Recents",
+                                style: kTitleStyle.copyWith(color: Colors.black, fontSize: 25),
+                              ),
+                            )),
                             SliverToBoxAdapter(
                                 child: SizedBox(
-                                  height: 240,
-                                  child: ListView.builder(
-                                    itemCount: books.length,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) =>
-                                    books.isNotEmpty
-                                        ? SizedBox(
-                                      width: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width / 3,
-                                      child: Card(
-                                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                                        elevation: 0,
-                                        color: Colors.transparent,
-                                        child: Column(
-                                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ClipRRect(
-                                                borderRadius: BorderRadius.circular(10),
-                                                child: Image.network(
-                                                  books[index].image.toString(),
-                                                  height: 160,
-                                                  fit: BoxFit.cover,
-                                                )),
-                                            const SizedBox(height: 20),
-                                            Text(books[index].title!,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: kSubTitleStyle.copyWith(color: Colors.black, fontSize: 16))
-                                          ],
+                              height: 240,
+                              child: ListView.builder(
+                                itemCount: books.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) => books.isNotEmpty
+                                    ? SizedBox(
+                                        width: MediaQuery.of(context).size.width / 3,
+                                        child: Card(
+                                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                                          elevation: 0,
+                                          color: Colors.transparent,
+                                          child: Column(
+                                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: [
+                                              ClipRRect(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  child: Image.network(
+                                                    books[index].image.toString(),
+                                                    height: 160,
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                              const SizedBox(height: 20),
+                                              Text(books[index].title!,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: kSubTitleStyle.copyWith(color: Colors.black, fontSize: 16))
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                        : Container(),
-                                  ),
-                                )),
+                                      )
+                                    : Container(),
+                              ),
+                            )),
                             SliverToBoxAdapter(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -140,39 +133,36 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             SliverGrid(
-                                delegate: SliverChildBuilderDelegate(
-                                  childCount: categoriesList.length,
-                                      (context, index) =>
-                                      Card(
-                                        elevation: 12,
-                                        margin: const EdgeInsets.all(10),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(height: 48, width: 48, child: categoriesList[index]['icon']),
-                                              const SizedBox(height: 10),
-                                              Expanded(
-                                                child: AutoSizeText(
-                                                  categoriesList[index]['title'],
-                                                  style: kSubTitleStyle,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                            ],
+                              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: MediaQuery.of(context).size.width / 3, mainAxisSpacing: 40),
+                              delegate: SliverChildBuilderDelegate(
+                                childCount: categoriesList.length,
+                                (context, index) => Card(
+                                  elevation: 12,
+                                  margin: const EdgeInsets.all(10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(height: 48, width: 48, child: categoriesList[index]['icon']),
+                                        const SizedBox(height: 10),
+                                        Expanded(
+                                          child: AutoSizeText(
+                                            categoriesList[index]['title'],
+                                            style: kSubTitleStyle,
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
-                                      ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width / 3, mainAxisSpacing: 40))
+                              ),
+                            )
                           ],
                         ),
                       ),

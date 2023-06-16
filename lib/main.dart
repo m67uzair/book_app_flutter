@@ -1,5 +1,6 @@
 import 'package:e_book/auth_page.dart';
 import 'package:e_book/providers/auth_provider.dart';
+import 'package:e_book/views/books_screen.dart';
 import 'package:e_book/views/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {
-              return const HomeScreen();
+              return const BookScreen();
             } else {
               return const AuthPage();
             }
