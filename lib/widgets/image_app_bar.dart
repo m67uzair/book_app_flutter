@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_contants.dart';
 import 'package:flutter/material.dart';
 
@@ -42,10 +43,13 @@ class ImageAppBar extends StatelessWidget {
                       const SizedBox(height: 5),
                       SizedBox(
                         width: 120,
-                        child: Text(
+                        child: AutoSizeText(
                           title,
                           textAlign: TextAlign.end,
-                          softWrap: true,
+                          // softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          wrapWords: false,
                           style: kSubTitleStyle.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
