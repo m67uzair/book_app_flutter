@@ -91,16 +91,23 @@ class _BookScreenState extends State<BookScreen> {
                                                     )
                                                   ],
                                                 ),
-                                                Text(
-                                                  books[index].title!,
-                                                  style: kSubTitleStyle.copyWith(color: Colors.black),
-                                                  textAlign: TextAlign.center,
+                                                SizedBox(
+                                                  width: 300,
+                                                  child: Text(
+                                                    books[index].title!,
+                                                    style: kSubTitleStyle.copyWith(color: Colors.black),
+                                                    textAlign: TextAlign.center,
+                                                  ),
                                                 ),
-                                                Text(
-                                                  books[index].subtitle ?? "",
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    color: Colors.black87,
+                                                const SizedBox(height: 10),
+                                                SizedBox(
+                                                  width: 300,
+                                                  child: Text(
+                                                    books[index].subtitle ?? "",
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      color: Colors.black87,
+                                                    ),
                                                   ),
                                                 ),
                                                 const SizedBox(
@@ -112,6 +119,7 @@ class _BookScreenState extends State<BookScreen> {
                                                       if (snapshot.hasData) {
                                                         return Expanded(
                                                             child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             Container(
                                                               decoration: BoxDecoration(
@@ -141,6 +149,89 @@ class _BookScreenState extends State<BookScreen> {
                                                                   ),
                                                                 ],
                                                               ),
+                                                            ),
+                                                            const SizedBox(height: 20),
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(
+                                                                  horizontal: 10, vertical: 5),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                children: [
+                                                                  MetaDataField(
+                                                                    title: "Pages",
+                                                                    data: snapshot.data!.pages,
+                                                                  ),
+                                                                  const Spacer(),
+                                                                  MetaDataField(
+                                                                    title: "Year",
+                                                                    data: snapshot.data!.year,
+                                                                  ),
+                                                                  const Spacer(),
+                                                                  MetaDataField(
+                                                                    title: "Publisher",
+                                                                    data: snapshot.data!.publisher,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 10),
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  const Text(
+                                                                    "AUTHORS:",
+                                                                    style: TextStyle(
+                                                                        fontSize: 17,
+                                                                        fontWeight: FontWeight.w500,
+                                                                        color: Colors.blueGrey),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Text(
+                                                                    snapshot.data!.authors!,
+                                                                    style: const TextStyle(
+                                                                      color: Colors.black87,
+                                                                      fontSize: 17,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 20),
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  TextButton.icon(
+                                                                    onPressed: () {},
+                                                                    icon: const Icon(Icons.chrome_reader_mode_outlined),
+                                                                    label: const Text("Read Online"),
+                                                                    style: const ButtonStyle(
+                                                                        foregroundColor:
+                                                                            MaterialStatePropertyAll(Colors.black),
+                                                                        backgroundColor:
+                                                                            MaterialStatePropertyAll(Colors.white),
+                                                                        elevation: MaterialStatePropertyAll(1)),
+                                                                  ),
+                                                                  TextButton.icon(
+                                                                    onPressed: () {},
+                                                                    icon: const Icon(Icons.download),
+                                                                    label: const Text("Download Pdf"),
+                                                                    style: const ButtonStyle(
+                                                                        foregroundColor:
+                                                                            MaterialStatePropertyAll(Colors.black),
+                                                                        backgroundColor:
+                                                                            MaterialStatePropertyAll(Colors.white),
+                                                                        elevation: MaterialStatePropertyAll(1)),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             )
                                                           ],
                                                         ));
@@ -158,7 +249,7 @@ class _BookScreenState extends State<BookScreen> {
                                             elevation: 10,
                                             shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(Radius.circular(8))),
-                                            child: Container(
+                                            child: SizedBox(
                                               width: 100,
                                               height: 150,
                                               child: ClipRRect(
@@ -208,6 +299,34 @@ class _BookScreenState extends State<BookScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MetaDataField extends StatelessWidget {
+  final String? data;
+  final String title;
+
+  const MetaDataField({
+    super.key,
+    this.data,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.blueGrey),
+        ),
+        AutoSizeText(
+          data ?? "---",
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.bold),
+        )
+      ],
     );
   }
 }
