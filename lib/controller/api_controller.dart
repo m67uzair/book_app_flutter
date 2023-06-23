@@ -23,7 +23,7 @@ class ApiController {
     return _books;
   }
 
-  Future<List<BookModel>> getBookByQuery(String query) async {
+  Future<List<BookModel>> getBooksByQuery(String query) async {
     String url = 'https://www.dbooks.org/api/search/Code';
     final response = await http.get(Uri.parse(url));
 
@@ -37,5 +37,20 @@ class ApiController {
       Fluttertoast.showToast(msg: "Error Code: ${response.statusCode.toString()}");
     }
     return _booksInQuery;
+  }
+
+  Future<BookModel> getBookById(String id) async {
+    String url = 'https://www.dbooks.org/api/book/$id';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body.toString());
+      BookModel book = BookModel.fromJson(data);
+      return book;
+    } else {
+      Fluttertoast.showToast(msg: "Error Code: ${response.statusCode.toString()}");
+      return BookModel();
+    }
   }
 }

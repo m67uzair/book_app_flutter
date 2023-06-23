@@ -22,7 +22,7 @@ class _BookScreenState extends State<BookScreen> {
         children: [
           const ImageAppBar(title: "Art & Entertainment"),
           FutureBuilder(
-            future: apiController.getBookByQuery("arts"),
+            future: apiController.getBooksByQuery("arts"),
             builder: (BuildContext context, AsyncSnapshot<List<BookModel>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Expanded(
@@ -51,28 +51,106 @@ class _BookScreenState extends State<BookScreen> {
                                 showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(20),
-                                    topLeft: Radius.circular(20),
-                                  )),
+                                  backgroundColor: Colors.transparent,
                                   builder: (context) => Container(
-                                    // color: const Color(0xFF737373).withOpacity(0),
                                     height: MediaQuery.of(context).size.height * 0.80,
+                                    margin: const EdgeInsets.symmetric(horizontal: 10),
                                     child: Stack(
                                       clipBehavior: Clip.none,
                                       alignment: Alignment.center,
                                       children: <Widget>[
                                         Container(
-                                          height: MediaQuery.of(context).size.height * 0.80,
-                                          width: double.infinity,
-                                          margin: const EdgeInsets.symmetric(horizontal: 10),
                                           decoration: const BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+                                                topLeft: Radius.circular(38), topRight: Radius.circular(38)),
                                           ),
-
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 100,
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed: () {},
+                                                            icon: const Icon(Icons.bookmark_outline),
+                                                          ),
+                                                          const Spacer(),
+                                                          IconButton(
+                                                            onPressed: () {},
+                                                            icon: const Icon(Icons.share),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                Text(
+                                                  books[index].title!,
+                                                  style: kSubTitleStyle.copyWith(color: Colors.black),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                Text(
+                                                  books[index].subtitle ?? "",
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                FutureBuilder(
+                                                    future: apiController.getBookById(books[index].id!),
+                                                    builder: (context, AsyncSnapshot<BookModel> snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return Expanded(
+                                                            child: Column(
+                                                          children: [
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.blueAccent.withOpacity(0.1),
+                                                                  borderRadius: BorderRadius.circular(8)),
+                                                              padding: const EdgeInsets.symmetric(
+                                                                  horizontal: 10, vertical: 10),
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  const Text(
+                                                                    "DESCRIPTION",
+                                                                    style: TextStyle(
+                                                                        fontSize: 17,
+                                                                        fontWeight: FontWeight.w500,
+                                                                        color: Colors.blueGrey),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Text(
+                                                                    snapshot.data!.description!,
+                                                                    style: const TextStyle(
+                                                                      color: Colors.black87,
+                                                                      fontSize: 17,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ));
+                                                      } else {
+                                                        return const Center(child: CircularProgressIndicator());
+                                                      }
+                                                    })
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                         Positioned(
                                           top: -90,
