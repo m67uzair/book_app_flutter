@@ -74,6 +74,7 @@ class _BookScreenState extends State<BookScreen> {
                                       bookTitle: books[index].title!,
                                       bookSubtitle: books[index].subtitle ?? "",
                                       bookImageURL: books[index].image!,
+                                      index: index,
                                     ),
                                   ),
                                 );

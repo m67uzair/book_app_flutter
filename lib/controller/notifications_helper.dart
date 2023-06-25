@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class NotificationHelper {
+class NotificationHelper extends ChangeNotifier{
   final FlutterLocalNotificationsPlugin _notification = FlutterLocalNotificationsPlugin();
 
   Future<void> initialize() async {
@@ -10,39 +11,43 @@ class NotificationHelper {
     await _notification.initialize(initializationsSettings);
   }
 
-  Future<void> showInProgressNotification(int progress, int notificationId) async {
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-     AndroidNotificationDetails(
+  Future<void> showInProgressNotification(
+      int progress, String totalSize, String downloadedSize, int notificationId, String fileName) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       '01',
-      'channel_name',
+      'progress channel',
       importance: Importance.high,
       priority: Priority.high,
       onlyAlertOnce: true,
       showProgress: true,
-       progress: progress,
-       maxProgress: 100,
+      progress: progress,
+      maxProgress: 100,
     );
     await _notification.show(
-      0,
-      'Downloading PDF',
-      'Download in progress... $progress%',
+      notificationId,
+      'Downloading $fileName',
+      'Download in progress... $downloadedSize / $totalSize $progress%',
       NotificationDetails(android: androidPlatformChannelSpecifics),
     );
   }
 
-  Future<void> showCompletedNotification(int notificationId) async {
-    const android = AndroidNotificationDetails(
+  Future<void> cancelInProgressNotification(int notificationId) async {
+    await _notification.cancel(notificationId);
+  }
+
+  Future<void> showCompletedNotification(int notificationId, String fileName) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+      '01',
       'progress channel',
-      'progress channel',
-      channelDescription: 'downlaod Compelete',
-      priority: Priority.high,
       importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
     );
     await _notification.show(
       notificationId,
       'Download Complete',
-      'PDF file downloaded successfully.',
-      const NotificationDetails(android: android),
+      '$fileName downloaded successfully.',
+      NotificationDetails(android: androidPlatformChannelSpecifics),
     );
   }
 }

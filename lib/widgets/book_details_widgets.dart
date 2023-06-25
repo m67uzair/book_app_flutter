@@ -7,20 +7,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookDetailsSheet extends StatelessWidget {
-  const BookDetailsSheet({
-    super.key,
-    required this.apiController,
-    required this.bookId,
-    required this.bookTitle,
-    required this.bookSubtitle,
-    required this.bookImageURL,
-  });
+  const BookDetailsSheet(
+      {super.key,
+      required this.apiController,
+      required this.bookId,
+      required this.bookTitle,
+      required this.bookSubtitle,
+      required this.bookImageURL,
+      required this.index});
 
   final ApiController apiController;
   final String bookId;
   final String bookTitle;
   final String bookSubtitle;
   final String bookImageURL;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -88,122 +89,123 @@ class BookDetailsSheet extends StatelessWidget {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.blueAccent.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "DESCRIPTION",
-                                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.blueGrey),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.blueAccent.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "DESCRIPTION",
+                                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.blueGrey),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    snapshot.data!.description!,
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(
-                                height: 10,
+                            ),
+                            const SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  MetaDataField(
+                                    title: "Pages",
+                                    data: snapshot.data!.pages,
+                                  ),
+                                  const Spacer(),
+                                  MetaDataField(
+                                    title: "Year",
+                                    data: snapshot.data!.year,
+                                  ),
+                                  const Spacer(),
+                                  MetaDataField(
+                                    title: "Publisher",
+                                    data: snapshot.data!.publisher,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                snapshot.data!.description!,
-                                style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 17,
-                                ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "AUTHORS:",
+                                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.blueGrey),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    snapshot.data!.authors!,
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              MetaDataField(
-                                title: "Pages",
-                                data: snapshot.data!.pages,
-                              ),
-                              const Spacer(),
-                              MetaDataField(
-                                title: "Year",
-                                data: snapshot.data!.year,
-                              ),
-                              const Spacer(),
-                              MetaDataField(
-                                title: "Publisher",
-                                data: snapshot.data!.publisher,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "AUTHORS:",
-                                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.blueGrey),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                snapshot.data!.authors!,
-                                style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton.icon(
-                                onPressed: () async {
-                                  final url = Uri.parse("${snapshot.data!.url!}read/");
+                            ),
+                            const SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton.icon(
+                                    onPressed: () async {
+                                      final url = Uri.parse("${snapshot.data!.url!}read/");
 
-                                  try {
-                                      print(url);
-                                    if (await canLaunchUrl(url)) {
-                                      await launchUrl(url);
-                                    }
-                                  } on Exception catch (e) {
-                                    Fluttertoast.showToast(
-                                        msg: "Cant Open link, read link might not  be "
-                                            "available \n OR you don't have a stable internet connection",
-                                        webShowClose: true,
-                                        timeInSecForIosWeb: 5);
-                                  }
-                                },
-                                icon: const Icon(Icons.chrome_reader_mode_outlined),
-                                label: const Text("Read Online"),
-                                style: const ButtonStyle(
-                                    foregroundColor: MaterialStatePropertyAll(Colors.black),
-                                    backgroundColor: MaterialStatePropertyAll(Colors.white),
-                                    elevation: MaterialStatePropertyAll(1)),
+                                      try {
+                                        print(url);
+                                        if (await canLaunchUrl(url)) {
+                                          await launchUrl(url);
+                                        }
+                                      } on Exception catch (e) {
+                                        Fluttertoast.showToast(
+                                            msg: "Cant Open link, read link might not  be "
+                                                "available \n OR you don't have a stable internet connection",
+                                            webShowClose: true,
+                                            timeInSecForIosWeb: 5);
+                                      }
+                                    },
+                                    icon: const Icon(Icons.chrome_reader_mode_outlined),
+                                    label: const Text("Read Online"),
+                                    style: const ButtonStyle(
+                                        foregroundColor: MaterialStatePropertyAll(Colors.black),
+                                        backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                        elevation: MaterialStatePropertyAll(1)),
+                                  ),
+                                  TextButton.icon(
+                                    onPressed: () async {
+                                      await apiController.downloadBook(
+                                          snapshot.data!.download!, index, snapshot.data!.title!);
+                                    },
+                                    icon: const Icon(Icons.download),
+                                    label: const Text("Download Pdf"),
+                                    style: const ButtonStyle(
+                                        foregroundColor: MaterialStatePropertyAll(Colors.black),
+                                        backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                        elevation: MaterialStatePropertyAll(1)),
+                                  ),
+                                ],
                               ),
-                              TextButton.icon(
-                                onPressed: () async{
-                                  await apiController.downloadBook(snapshot.data!.download!, 0);
-                                },
-                                icon: const Icon(Icons.download),
-                                label: const Text("Download Pdf"),
-                                style: const ButtonStyle(
-                                    foregroundColor: MaterialStatePropertyAll(Colors.black),
-                                    backgroundColor: MaterialStatePropertyAll(Colors.white),
-                                    elevation: MaterialStatePropertyAll(1)),
-                              ),
-                            ],
-                          ),
-                        )
+                            )
                           ],
                         );
                       } else {
