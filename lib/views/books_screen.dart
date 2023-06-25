@@ -1,10 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_contants.dart';
 import 'package:e_book/controller/api_controller.dart';
+import 'package:e_book/controller/notifications_helper.dart';
 import 'package:e_book/models/book_model.dart';
 import 'package:e_book/widgets/book_details_widgets.dart';
 import 'package:e_book/widgets/image_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+NotificationHelper _notificationHelper = NotificationHelper();
 
 class BookScreen extends StatefulWidget {
   const BookScreen({Key? key}) : super(key: key);
@@ -15,6 +20,13 @@ class BookScreen extends StatefulWidget {
 
 class _BookScreenState extends State<BookScreen> {
   ApiController apiController = ApiController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _notificationHelper.initialize();
+  }
 
   @override
   Widget build(BuildContext context) {

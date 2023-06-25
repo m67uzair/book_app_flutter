@@ -191,7 +191,9 @@ class BookDetailsSheet extends StatelessWidget {
                                     elevation: MaterialStatePropertyAll(1)),
                               ),
                               TextButton.icon(
-                                onPressed: () {},
+                                onPressed: () async{
+                                  await apiController.downloadBook(snapshot.data!.download!, 0);
+                                },
                                 icon: const Icon(Icons.download),
                                 label: const Text("Download Pdf"),
                                 style: const ButtonStyle(
