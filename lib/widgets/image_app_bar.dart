@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:e_book/constants/style_contants.dart';
+import 'package:e_book/constants/style_constants.dart';
 import 'package:flutter/material.dart';
 
 class ImageAppBar extends StatelessWidget {

@@ -74,7 +74,13 @@ class ApiController extends ChangeNotifier {
     }
 
     try {
-      downloadProgressMap[notificationId.toString()] = {'name': fileName, 'progress': 0};
+      downloadProgressMap[notificationId.toString()] = {
+        'name': fileName,
+        'progress': 0,
+        'image': image,
+        'downloadedSize': '0',
+        'totalSize': '0'
+      };
       notifyListeners();
       print(downloadProgressMap.toString());
       final response = await dio.download(
@@ -87,6 +93,9 @@ class ApiController extends ChangeNotifier {
             final downloadedSize = formatFileSize(received);
 
             downloadProgressMap[notificationId.toString()]['progress'] = progress;
+            downloadProgressMap[notificationId.toString()]['downloadedSize'] = downloadedSize;
+            downloadProgressMap[notificationId.toString()]['totalSize'] = totalSize;
+
             notifyListeners();
             await notificationsHelper.showInProgressNotification(
                 progress, totalSize, downloadedSize, notificationId, fileName);
@@ -100,7 +109,6 @@ class ApiController extends ChangeNotifier {
         print('cancel');
         await notificationsHelper.showCompletedNotification(notificationId, fileName);
         print('complete');
-
       } else {
         Fluttertoast.showToast(msg: "Error Downloading file");
       }

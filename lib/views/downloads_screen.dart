@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:e_book/constants/style_contants.dart';
+import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/controller/api_controller.dart';
-import 'package:e_book/models/book_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,23 +39,52 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                       itemBuilder: (context, index) {
                         String title = books[index].value['name'] ?? "no title";
                         int progress = books[index].value['progress'];
+                        String downloadedSize = books[index].value['downloadedSize'];
+                        String totalSize = books[index].value['totalSize'];
+                        String image = books[index].value['image'];
+
                         return Card(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
-                          elevation: 0,
-                          color: Colors.transparent,
-                          child: Column(
+                          elevation: 4,
+                          color: Colors.white,
+                          child: Row(
                             children: [
-                              SizedBox(
-                                width: 450,
-                                child: LinearProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                                  value: progress.toDouble()/100,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  image,
+                                  height: 160,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              AutoSizeText(title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: kSubTitleStyle.copyWith(color: Colors.black, fontSize: 16)),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      AutoSizeText(
+                                        title,
+                                        textAlign: TextAlign.start,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: kSubTitleStyle.copyWith(color: Colors.black, fontSize: 16),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      AutoSizeText(
+                                        "Downloading... $downloadedSize / $totalSize ($progress%)",
+                                        maxLines: 1,
+                                      ),
+                                      LinearProgressIndicator(
+                                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
+                                        value: progress.toDouble() / 100,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         );
