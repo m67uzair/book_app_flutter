@@ -1,4 +1,5 @@
 import 'package:e_book/auth_page.dart';
+import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/providers/auth_provider.dart';
 import 'package:e_book/views/books_screen.dart';
 import 'package:e_book/views/home_screen.dart';
@@ -34,7 +35,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(
-            create: (_) => AuthProvider(firebaseAuth: FirebaseAuth.instance, prefs: prefs))
+          create: (_) => AuthProvider(firebaseAuth: FirebaseAuth.instance, prefs: prefs),
+        ),
+        ChangeNotifierProvider<ApiController>(
+          create: (_) => ApiController(),
+        )
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

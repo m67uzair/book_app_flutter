@@ -3,6 +3,7 @@ import 'package:e_book/constants/style_contants.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/controller/notifications_helper.dart';
 import 'package:e_book/models/book_model.dart';
+import 'package:e_book/views/downloads_screen.dart';
 import 'package:e_book/widgets/book_details_widgets.dart';
 import 'package:e_book/widgets/image_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,15 @@ class _BookScreenState extends State<BookScreen> {
       body: Column(
         children: [
           const ImageAppBar(title: "Art & Entertainment"),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DownloadsScreen(),
+                    ));
+              },
+              child: const Text('Downloads')),
           FutureBuilder(
             future: apiController.getBooksByQuery("arts"),
             builder: (BuildContext context, AsyncSnapshot<List<BookModel>> snapshot) {
@@ -69,7 +79,7 @@ class _BookScreenState extends State<BookScreen> {
                                     height: MediaQuery.of(context).size.height * 0.80,
                                     margin: const EdgeInsets.symmetric(horizontal: 10),
                                     child: BookDetailsSheet(
-                                      apiController: apiController,
+
                                       bookId: books[index].id!,
                                       bookTitle: books[index].title!,
                                       bookSubtitle: books[index].subtitle ?? "",

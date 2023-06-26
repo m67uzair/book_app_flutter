@@ -4,25 +4,36 @@ import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/models/book_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BookDetailsSheet extends StatelessWidget {
-  const BookDetailsSheet(
+class BookDetailsSheet extends StatefulWidget {
+   BookDetailsSheet(
       {super.key,
-      required this.apiController,
       required this.bookId,
       required this.bookTitle,
       required this.bookSubtitle,
       required this.bookImageURL,
       required this.index});
 
-  final ApiController apiController;
   final String bookId;
   final String bookTitle;
   final String bookSubtitle;
   final String bookImageURL;
   final int index;
 
+  @override
+  State<BookDetailsSheet> createState() => _BookDetailsSheetState();
+}
+
+class _BookDetailsSheetState extends State<BookDetailsSheet> {
+  late final ApiController apiController;
+
+  @override
+  void initState() {
+    apiController = Provider.of<ApiController>(context,listen: false);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -63,7 +74,7 @@ class BookDetailsSheet extends StatelessWidget {
                 SizedBox(
                   width: 300,
                   child: Text(
-                    bookTitle,
+                    widget.bookTitle,
                     style: kSubTitleStyle.copyWith(color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
@@ -72,7 +83,7 @@ class BookDetailsSheet extends StatelessWidget {
                 SizedBox(
                   width: 300,
                   child: Text(
-                    bookSubtitle,
+                    widget.bookSubtitle,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black87,
@@ -83,7 +94,7 @@ class BookDetailsSheet extends StatelessWidget {
                   height: 20,
                 ),
                 FutureBuilder(
-                    future: apiController.getBookById(bookId),
+                    future: apiController.getBookById(widget.bookId),
                     builder: (context, AsyncSnapshot<BookModel> snapshot) {
                       if (snapshot.hasData) {
                         return Column(
@@ -104,7 +115,7 @@ class BookDetailsSheet extends StatelessWidget {
                                     height: 10,
                                   ),
                                   Text(
-                                    snapshot.data!.description!,
+                                    snapshot.data!.description ?? "No Description Provided",
                                     style: const TextStyle(
                                       color: Colors.black87,
                                       fontSize: 17,
@@ -152,7 +163,7 @@ class BookDetailsSheet extends StatelessWidget {
                                     height: 10,
                                   ),
                                   Text(
-                                    snapshot.data!.authors!,
+                                    snapshot.data!.authors ?? "No Authors Provided",
                                     style: const TextStyle(
                                       color: Colors.black87,
                                       fontSize: 17,
@@ -193,8 +204,8 @@ class BookDetailsSheet extends StatelessWidget {
                                   ),
                                   TextButton.icon(
                                     onPressed: () async {
-                                      await apiController.downloadBook(
-                                          snapshot.data!.download!, index, snapshot.data!.title!);
+                                      await apiController.downloadBook(snapshot.data!.download!, widget.index,
+                                          snapshot.data!.title!, snapshot.data!.image!);
                                     },
                                     icon: const Icon(Icons.download),
                                     label: const Text("Download Pdf"),
@@ -227,7 +238,7 @@ class BookDetailsSheet extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  bookImageURL,
+                  widget.bookImageURL,
                   fit: BoxFit.cover,
                 ),
               ),

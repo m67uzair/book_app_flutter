@@ -37,7 +37,7 @@ class NotificationHelper extends ChangeNotifier{
 
   Future<void> showCompletedNotification(int notificationId, String fileName) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-      '01',
+      '02',
       'progress channel',
       importance: Importance.high,
       priority: Priority.high,
