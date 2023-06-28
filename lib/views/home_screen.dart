@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,7 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
     {'title': 'History', 'icon': SvgPicture.asset('assets/svgIcons/icons8-greek-helmet.svg')},
   ];
 
-  ApiController apiController = ApiController();
+  late ApiController apiController;
+
+  @override
+  void initState() {
+    apiController = context.read<ApiController>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

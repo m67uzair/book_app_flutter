@@ -16,6 +16,10 @@ class ApiController extends ChangeNotifier {
   final notificationsHelper = NotificationHelper();
   Map downloadProgressMap = {};
 
+  final prefs;
+
+  ApiController({required this.prefs});
+
   Map get downloadProgress => downloadProgressMap;
 
   Future<List<BookModel>> getRecentBooks() async {
@@ -65,6 +69,13 @@ class ApiController extends ChangeNotifier {
     }
   }
 
+  loadDownloadProgress() {
+    final downloadProgressJson = prefs.getString('downloadProgress');
+    if (downloadProgressJson != null) {
+      downloadProgressMap.addAll(jsonDecode(downloadProgressJson)) ;
+    }
+  }
+
   Future<void> downloadBook(String downloadURL, int notificationId, String fileName, String image) async {
     final savePath = "/storage/emulated/0/Download/$fileName.pdf";
 
@@ -72,6 +83,10 @@ class ApiController extends ChangeNotifier {
       Fluttertoast.showToast(msg: "File already exits");
       return;
     }
+
+    int progress = 0;
+    String totalSize = '0 MB';
+    String downloadedSize = '0 MB';
 
     try {
       downloadProgressMap[notificationId.toString()] = {
@@ -88,10 +103,11 @@ class ApiController extends ChangeNotifier {
         savePath,
         onReceiveProgress: (received, total) async {
           if (total != -1) {
-            final progress = (received / total * 100).toInt();
-            final totalSize = formatFileSize(total);
-            final downloadedSize = formatFileSize(received);
+            progress = (received / total * 100).toInt();
+            totalSize = formatFileSize(total);
+            downloadedSize = formatFileSize(received);
 
+            print("pado+ ${downloadProgressMap[notificationId.toString()]}");
             downloadProgressMap[notificationId.toString()]['progress'] = progress;
             downloadProgressMap[notificationId.toString()]['downloadedSize'] = downloadedSize;
             downloadProgressMap[notificationId.toString()]['totalSize'] = totalSize;
@@ -109,6 +125,16 @@ class ApiController extends ChangeNotifier {
         print('cancel');
         await notificationsHelper.showCompletedNotification(notificationId, fileName);
         print('complete');
+
+        downloadProgressMap[notificationId.toString()] = {
+          'name': fileName,
+          'progress': progress,
+          'downloadedSize': downloadedSize,
+          'totalSize': totalSize,
+          'image': image,
+        };
+
+        prefs.setString('downloadProgress', jsonEncode(downloadProgressMap));
       } else {
         Fluttertoast.showToast(msg: "Error Downloading file");
       }

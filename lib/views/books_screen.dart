@@ -8,6 +8,7 @@ import 'package:e_book/widgets/book_details_widgets.dart';
 import 'package:e_book/widgets/image_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 NotificationHelper _notificationHelper = NotificationHelper();
@@ -20,13 +21,15 @@ class BookScreen extends StatefulWidget {
 }
 
 class _BookScreenState extends State<BookScreen> {
-  ApiController apiController = ApiController();
+  late ApiController apiController;
 
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     _notificationHelper.initialize();
+    apiController = context.read<ApiController>();
+
+    super.initState();
   }
 
   @override

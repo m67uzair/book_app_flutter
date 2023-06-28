@@ -12,6 +12,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthProvider(firebaseAuth: FirebaseAuth.instance, prefs: prefs),
         ),
         ChangeNotifierProvider<ApiController>(
-          create: (_) => ApiController(),
+          create: (_) => ApiController(prefs:prefs),
         )
       ],
       child: MaterialApp(

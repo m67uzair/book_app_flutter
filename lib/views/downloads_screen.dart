@@ -14,10 +14,13 @@ class DownloadsScreen extends StatefulWidget {
 }
 
 class _DownloadsScreenState extends State<DownloadsScreen> {
+  late ApiController apiController;
   List books = [];
 
   @override
   void initState() {
+    apiController = context.read<ApiController>();
+    apiController.loadDownloadProgress();
     super.initState();
   }
 
@@ -27,8 +30,8 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       body: Column(
         children: [
           const ImageAppBar(title: "Downloads"),
-          Consumer<ApiController>(builder: (context, apiController, child) {
-            books = apiController.downloadProgress.entries.toList();
+          Consumer<ApiController>(builder: (context, downloadsProvider, child) {
+            books = downloadsProvider.downloadProgress.entries.toList();
             return Expanded(
               child: books.isEmpty
                   ? const Center(
@@ -36,6 +39,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                     )
                   : ListView.builder(
                       itemCount: books.length,
+                      reverse: true,
                       itemBuilder: (context, index) {
                         String title = books[index].value['name'] ?? "no title";
                         int progress = books[index].value['progress'];
