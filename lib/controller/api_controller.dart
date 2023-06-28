@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:io';
+import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:e_book/controller/notifications_helper.dart';
 import 'package:e_book/models/book_model.dart';
@@ -72,7 +72,7 @@ class ApiController extends ChangeNotifier {
   loadDownloadProgress() {
     final downloadProgressJson = prefs.getString('downloadProgress');
     if (downloadProgressJson != null) {
-      downloadProgressMap.addAll(jsonDecode(downloadProgressJson)) ;
+      downloadProgressMap.addAll(jsonDecode(downloadProgressJson));
     }
   }
 
@@ -87,6 +87,7 @@ class ApiController extends ChangeNotifier {
     int progress = 0;
     String totalSize = '0 MB';
     String downloadedSize = '0 MB';
+    notificationId = generateNotificationId(notificationId.toString());
 
     try {
       downloadProgressMap[notificationId.toString()] = {
@@ -177,5 +178,10 @@ class ApiController extends ChangeNotifier {
     }
 
     return '${value.toStringAsFixed(2)} $unit';
+  }
+
+  int generateNotificationId(String bookId) {
+    int truncatedId = int.tryParse(bookId) ?? 0;
+    return truncatedId % (pow(2, 31) as int);
   }
 }

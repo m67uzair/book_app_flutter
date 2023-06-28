@@ -15,13 +15,21 @@ class DownloadsScreen extends StatefulWidget {
 
 class _DownloadsScreenState extends State<DownloadsScreen> {
   late ApiController apiController;
+  final ScrollController _scrollController = ScrollController();
   List books = [];
 
   @override
   void initState() {
     apiController = context.read<ApiController>();
     apiController.loadDownloadProgress();
+    WidgetsBinding.instance.addPostFrameCallback((_) => scrollToTop());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,6 +39,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
         children: [
           const ImageAppBar(title: "Downloads"),
           Consumer<ApiController>(builder: (context, downloadsProvider, child) {
+            // scrollToTop();
             books = downloadsProvider.downloadProgress.entries.toList();
             return Expanded(
               child: books.isEmpty
@@ -38,8 +47,9 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                       child: Text('Nothing to see here'),
                     )
                   : ListView.builder(
-                      itemCount: books.length,
                       reverse: true,
+                      itemCount: books.length,
+                      controller: _scrollController,
                       itemBuilder: (context, index) {
                         String title = books[index].value['name'] ?? "no title";
                         int progress = books[index].value['progress'];
@@ -48,7 +58,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                         String image = books[index].value['image'];
 
                         return Card(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           elevation: 4,
                           color: Colors.white,
                           child: Row(
@@ -77,14 +87,36 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                       const SizedBox(
                                         height: 15,
                                       ),
-                                      AutoSizeText(
-                                        "Downloading... $downloadedSize / $totalSize ($progress%)",
-                                        maxLines: 1,
-                                      ),
-                                      LinearProgressIndicator(
-                                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
-                                        value: progress.toDouble() / 100,
-                                      ),
+                                      progress == 100
+                                          ? Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(totalSize),
+                                                  TextButton.icon(
+                                                    onPressed: () {},
+                                                    icon: const Icon(Icons.chrome_reader_mode_outlined),
+                                                    label: const Text("Open"),
+                                                    style: const ButtonStyle(
+                                                        foregroundColor: MaterialStatePropertyAll(Colors.black),
+                                                        backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                                        elevation: MaterialStatePropertyAll(1)),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          : AutoSizeText(
+                                              "Downloading... $downloadedSize / $totalSize "
+                                              "($progress%)",
+                                              maxLines: 1,
+                                            ),
+                                      progress == 100
+                                          ? const SizedBox.shrink()
+                                          : LinearProgressIndicator(
+                                              valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
+                                              value: progress.toDouble() / 100,
+                                            ),
                                     ],
                                   ),
                                 ),
@@ -99,5 +131,15 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
         ],
       ),
     );
+  }
+
+  void scrollToTop() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500), // Adjust the duration as needed
+        curve: Curves.easeInOut,
+      );
+    }
   }
 }

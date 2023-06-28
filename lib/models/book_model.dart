@@ -13,20 +13,21 @@
 
 class BookModel {
   BookModel({
-      String? status, 
-      String? id, 
-      String? title, 
-      String? subtitle, 
-      String? description, 
-      String? authors, 
-      String? publisher, 
-      String? pages, 
-      String? year, 
-      String? image, 
-      String? url, 
-      String? download,}){
+    String? status,
+    String? id,
+    String? title,
+    String? subtitle,
+    String? description,
+    String? authors,
+    String? publisher,
+    String? pages,
+    String? year,
+    String? image,
+    String? url,
+    String? download,
+  }) {
     _status = status;
-    _id = id;
+    _id = extractNumericPart(id!);
     _title = title;
     _subtitle = subtitle;
     _description = description;
@@ -37,11 +38,11 @@ class BookModel {
     _image = image;
     _url = url;
     _download = download;
-}
+  }
 
   BookModel.fromJson(dynamic json) {
     _status = json['status'];
-    _id = json['id'];
+    _id = extractNumericPart(json['id']);
     _title = json['title'];
     _subtitle = json['subtitle'];
     _description = json['description'];
@@ -53,6 +54,7 @@ class BookModel {
     _url = json['url'];
     _download = json['download'];
   }
+
   String? _status;
   String? _id;
   String? _title;
@@ -65,42 +67,58 @@ class BookModel {
   String? _image;
   String? _url;
   String? _download;
-BookModel copyWith({  String? status,
-  String? id,
-  String? title,
-  String? subtitle,
-  String? description,
-  String? authors,
-  String? publisher,
-  String? pages,
-  String? year,
-  String? image,
-  String? url,
-  String? download,
-}) => BookModel(  status: status ?? _status,
-  id: id ?? _id,
-  title: title ?? _title,
-  subtitle: subtitle ?? _subtitle,
-  description: description ?? _description,
-  authors: authors ?? _authors,
-  publisher: publisher ?? _publisher,
-  pages: pages ?? _pages,
-  year: year ?? _year,
-  image: image ?? _image,
-  url: url ?? _url,
-  download: download ?? _download,
-);
+
+  BookModel copyWith({
+    String? status,
+    String? id,
+    String? title,
+    String? subtitle,
+    String? description,
+    String? authors,
+    String? publisher,
+    String? pages,
+    String? year,
+    String? image,
+    String? url,
+    String? download,
+  }) =>
+      BookModel(
+        status: status ?? _status,
+        id: id ?? _id,
+        title: title ?? _title,
+        subtitle: subtitle ?? _subtitle,
+        description: description ?? _description,
+        authors: authors ?? _authors,
+        publisher: publisher ?? _publisher,
+        pages: pages ?? _pages,
+        year: year ?? _year,
+        image: image ?? _image,
+        url: url ?? _url,
+        download: download ?? _download,
+      );
+
   String? get status => _status;
+
   String? get id => _id;
+
   String? get title => _title;
+
   String? get subtitle => _subtitle;
+
   String? get description => _description;
+
   String? get authors => _authors;
+
   String? get publisher => _publisher;
+
   String? get pages => _pages;
+
   String? get year => _year;
+
   String? get image => _image;
+
   String? get url => _url;
+
   String? get download => _download;
 
   Map<String, dynamic> toJson() {
@@ -120,4 +138,13 @@ BookModel copyWith({  String? status,
     return map;
   }
 
+  String extractNumericPart(String bookId) {
+    RegExp regex = RegExp(r'\d+');
+    RegExpMatch? match = regex.firstMatch(bookId);
+    if (match != null) {
+      return match.group(0) ?? bookId;
+    } else {
+      return bookId;
+    }
+  }
 }

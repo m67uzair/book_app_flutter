@@ -4,6 +4,7 @@ import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/controller/notifications_helper.dart';
 import 'package:e_book/models/book_model.dart';
 import 'package:e_book/views/downloads_screen.dart';
+import 'package:e_book/views/saved_books_screen.dart';
 import 'package:e_book/widgets/book_details_widgets.dart';
 import 'package:e_book/widgets/image_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +44,10 @@ class _BookScreenState extends State<BookScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DownloadsScreen(),
+                      builder: (context) => const SavedBooksScreen(),
                     ));
               },
-              child: const Text('Downloads')),
+              child: const Text('Saved Books')),
           FutureBuilder(
             future: apiController.getBooksByQuery("arts"),
             builder: (BuildContext context, AsyncSnapshot<List<BookModel>> snapshot) {
@@ -82,13 +83,10 @@ class _BookScreenState extends State<BookScreen> {
                                     height: MediaQuery.of(context).size.height * 0.80,
                                     margin: const EdgeInsets.symmetric(horizontal: 10),
                                     child: BookDetailsSheet(
-
-                                      bookId: books[index].id!,
-                                      bookTitle: books[index].title!,
-                                      bookSubtitle: books[index].subtitle ?? "",
-                                      bookImageURL: books[index].image!,
-                                      index: index,
-                                    ),
+                                        bookId: books[index].id!,
+                                        bookTitle: books[index].title!,
+                                        bookSubtitle: books[index].subtitle ?? "",
+                                        bookImageURL: books[index].image!),
                                   ),
                                 );
                               },

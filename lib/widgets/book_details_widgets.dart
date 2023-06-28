@@ -2,25 +2,24 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/models/book_model.dart';
+import 'package:e_book/providers/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookDetailsSheet extends StatefulWidget {
-   BookDetailsSheet(
+  BookDetailsSheet(
       {super.key,
       required this.bookId,
       required this.bookTitle,
       required this.bookSubtitle,
-      required this.bookImageURL,
-      required this.index});
+      required this.bookImageURL});
 
   final String bookId;
   final String bookTitle;
   final String bookSubtitle;
   final String bookImageURL;
-  final int index;
 
   @override
   State<BookDetailsSheet> createState() => _BookDetailsSheetState();
@@ -31,9 +30,10 @@ class _BookDetailsSheetState extends State<BookDetailsSheet> {
 
   @override
   void initState() {
-    apiController = Provider.of<ApiController>(context,listen: false);
+    apiController = Provider.of<ApiController>(context, listen: false);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -57,10 +57,21 @@ class _BookDetailsSheetState extends State<BookDetailsSheet> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.bookmark_outline),
-                          ),
+                          Consumer<SavedBooksProvider>(builder: (context, savedBooksProvider, child) {
+                            return IconButton(
+                              onPressed: () async {
+                                if (!savedBooksProvider.isBookSaved) {
+                                  await savedBooksProvider.addBookToSaved(
+                                      bookId: widget.bookId,
+                                      bookName: widget.bookTitle,
+                                      bookImageURL: widget.bookImageURL);
+                                } else {
+                                  await savedBooksProvider.removeBookFromSaved(widget.bookId);
+                                }
+                              },
+                              icon: Icon(savedBooksProvider.isBookSaved ? Icons.bookmark : Icons.bookmark_outline),
+                            );
+                          }),
                           const Spacer(),
                           IconButton(
                             onPressed: () {},
@@ -204,8 +215,8 @@ class _BookDetailsSheetState extends State<BookDetailsSheet> {
                                   ),
                                   TextButton.icon(
                                     onPressed: () async {
-                                      await apiController.downloadBook(snapshot.data!.download!, widget.index,
-                                          snapshot.data!.title!, snapshot.data!.image!);
+                                      await apiController.downloadBook(snapshot.data!.download!,
+                                          int.parse(snapshot.data!.id!), snapshot.data!.title!, snapshot.data!.image!);
                                     },
                                     icon: const Icon(Icons.download),
                                     label: const Text("Download Pdf"),
