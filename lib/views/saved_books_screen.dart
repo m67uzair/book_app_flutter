@@ -38,7 +38,7 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
     return Scaffold(
       body: Column(
         children: [
-          const ImageAppBar(title: "Downloads"),
+          const ImageAppBar(title: "Saved Books"),
           Expanded(
               child: StreamBuilder<QuerySnapshot>(
             stream: savedBooksProvider.getBooksInSaved(),
@@ -70,12 +70,15 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            AutoSizeText(
-                              bookName,
-                              textAlign: TextAlign.start,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: kSubTitleStyle.copyWith(color: Colors.black, fontSize: 16),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Text(
+                                bookName,
+                                textAlign: TextAlign.start,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: kSubTitleStyle.copyWith(color: Colors.black, fontSize: 16),
+                              ),
                             ),
                             SizedBox(
                               height: 100,
@@ -85,15 +88,9 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
                                   Consumer<SavedBooksProvider>(builder: (context, savedBooksProvider, child) {
                                     return IconButton(
                                       onPressed: () async {
-                                        if (!savedBooksProvider.isBookSaved) {
-                                          await savedBooksProvider.addBookToSaved(
-                                              bookId: bookId, bookName: bookName, bookImageURL: bookImageURL);
-                                        } else {
-                                          await savedBooksProvider.removeBookFromSaved(bookId);
-                                        }
+                                        await savedBooksProvider.removeBookFromSaved(bookId);
                                       },
-                                      icon: Icon(
-                                          savedBooksProvider.isBookSaved ? Icons.bookmark : Icons.bookmark_outline),
+                                      icon: const Icon(Icons.bookmark),
                                     );
                                   }),
                                   const Spacer(),

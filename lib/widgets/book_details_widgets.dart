@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookDetailsSheet extends StatefulWidget {
-  BookDetailsSheet(
+  const BookDetailsSheet(
       {super.key,
       required this.bookId,
       required this.bookTitle,
@@ -58,18 +58,34 @@ class _BookDetailsSheetState extends State<BookDetailsSheet> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Consumer<SavedBooksProvider>(builder: (context, savedBooksProvider, child) {
-                            return IconButton(
-                              onPressed: () async {
-                                if (!savedBooksProvider.isBookSaved) {
-                                  await savedBooksProvider.addBookToSaved(
-                                      bookId: widget.bookId,
-                                      bookName: widget.bookTitle,
-                                      bookImageURL: widget.bookImageURL);
+                            return FutureBuilder(
+                              future: savedBooksProvider.isBookSaved(widget.bookId),
+                              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                } else if (snapshot.hasData) {
+                                  final isBookSaved = snapshot.data;
+                                  return IconButton(
+                                    iconSize: 30,
+                                    icon: Icon(
+                                      isBookSaved ? Icons.bookmark : Icons.bookmark_border,
+                                      color: isBookSaved ? Colors.black : Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      if (isBookSaved) {
+                                        savedBooksProvider.removeBookFromSaved(widget.bookId);
+                                      } else {
+                                        savedBooksProvider.addBookToSaved(
+                                            bookId: widget.bookId,
+                                            bookName: widget.bookTitle,
+                                            bookImageURL: widget.bookImageURL);
+                                      }
+                                    },
+                                  );
                                 } else {
-                                  await savedBooksProvider.removeBookFromSaved(widget.bookId);
+                                  return const Icon(Icons.bookmark_border);
                                 }
                               },
-                              icon: Icon(savedBooksProvider.isBookSaved ? Icons.bookmark : Icons.bookmark_outline),
                             );
                           }),
                           const Spacer(),
@@ -194,7 +210,6 @@ class _BookDetailsSheetState extends State<BookDetailsSheet> {
                                       final url = Uri.parse("${snapshot.data!.url!}read/");
 
                                       try {
-                                        print(url);
                                         if (await canLaunchUrl(url)) {
                                           await launchUrl(url);
                                         }

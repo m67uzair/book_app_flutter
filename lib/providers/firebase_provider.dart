@@ -5,12 +5,9 @@ import 'package:e_book/constants/firebase_constants.dart';
 
 class SavedBooksProvider extends ChangeNotifier {
   final FirebaseFirestore firebaseFirestore;
-  bool _isBookSaved = false;
   final SharedPreferences prefs;
 
   SavedBooksProvider({required this.firebaseFirestore, required this.prefs});
-
-  bool get isBookSaved => _isBookSaved;
 
   Future<void> addBookToSaved({required String bookId, required String bookName, required String bookImageURL}) async {
     Map<String, dynamic> book = {
@@ -26,8 +23,6 @@ class SavedBooksProvider extends ChangeNotifier {
         .collection(FirestoreConstants.pathSavedCollection)
         .doc(bookId)
         .set(book);
-
-    toggleIsBookSaved();
 
     notifyListeners();
   }
@@ -50,12 +45,17 @@ class SavedBooksProvider extends ChangeNotifier {
         .collection(FirestoreConstants.pathSavedCollection)
         .doc(bookId)
         .delete();
-
-    toggleIsBookSaved();
     notifyListeners();
   }
 
-  void toggleIsBookSaved() {
-    _isBookSaved = !_isBookSaved;
+  Future<bool> isBookSaved(String bookId) async {
+    DocumentSnapshot documentSnapshot = await firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .doc(prefs.getString(FirestoreConstants.userId))
+        .collection(FirestoreConstants.pathSavedCollection)
+        .doc(bookId)
+        .get();
+
+    return documentSnapshot.exists;
   }
 }
