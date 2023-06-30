@@ -3,9 +3,9 @@ import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/controller/notifications_helper.dart';
 import 'package:e_book/models/book_model.dart';
-import 'package:e_book/views/downloads_screen.dart';
 import 'package:e_book/views/saved_books_screen.dart';
 import 'package:e_book/widgets/book_details_widgets.dart';
+import 'package:e_book/widgets/floating_navigation_bar.dart';
 import 'package:e_book/widgets/image_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,6 +15,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 NotificationHelper _notificationHelper = NotificationHelper();
 
 class BookScreen extends StatefulWidget {
+  static const routeName = '/books_screen';
+
   const BookScreen({Key? key}) : super(key: key);
 
   @override
@@ -36,6 +38,8 @@ class _BookScreenState extends State<BookScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: const FloatingNavigationBar(currentRoute: BookScreen.routeName),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Column(
         children: [
           const ImageAppBar(title: "Art & Entertainment"),

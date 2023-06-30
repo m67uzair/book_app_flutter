@@ -1,9 +1,15 @@
 import 'dart:math';
 
+import 'package:e_book/views/books_screen.dart';
+import 'package:e_book/views/downloads_screen.dart';
+import 'package:e_book/views/home_screen.dart';
+import 'package:e_book/views/saved_books_screen.dart';
 import 'package:flutter/material.dart';
 
 class FloatingNavigationBar extends StatefulWidget {
-  const FloatingNavigationBar({Key? key}) : super(key: key);
+  final String currentRoute;
+
+  const FloatingNavigationBar({Key? key, required this.currentRoute}) : super(key: key);
 
   @override
   State<FloatingNavigationBar> createState() => _FloatingNavigationBarState();
@@ -33,9 +39,30 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar> {
             elevation: 4,
             child: Row(
               children: [
-                Expanded(child: NavbarButton(Icons.home)),
-                Expanded(child: NavbarButton(Icons.bookmark)),
-                Expanded(child: NavbarButton(Icons.search)),
+                Expanded(
+                    child: NavbarButton(
+                  icon: Icons.home,
+                  route: HomeScreen.routeName,
+                  currentRoute: widget.currentRoute,
+                )),
+                Expanded(
+                    child: NavbarButton(
+                  icon: Icons.bookmark,
+                  route: SavedBooksScreen.routeName,
+                  currentRoute: widget.currentRoute,
+                )),
+                Expanded(
+                    child: NavbarButton(
+                  icon: Icons.local_library_sharp,
+                  route: BookScreen.routeName,
+                  currentRoute: widget.currentRoute,
+                )),
+                Expanded(
+                    child: NavbarButton(
+                  icon: Icons.download,
+                  route: DownloadsScreen.routeName,
+                  currentRoute: widget.currentRoute,
+                )),
               ],
             ),
           ),
@@ -70,24 +97,19 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar> {
 class NavbarButton extends StatelessWidget {
   final IconData icon;
 
-/*  final String route;
-  final String currentRoute;*/
+  final String route;
+  final String currentRoute;
 
-  NavbarButton(
-    this.icon,
-    // this.route, this.currentRoute
-  );
+  NavbarButton({required this.icon, required this.route, required this.currentRoute});
 
   @override
   Widget build(BuildContext context) {
-    // final books = Provider.of<Books>(context, listen: false);
     return IconButton(
       icon: Icon(icon),
       color: Color(0xff0DB067),
       onPressed: () {
-        // if (currentRoute == route) return;
-        // Navigator.of(context).pushReplacementNamed(route);
-        // books.setFirstLoad(true);
+        if (currentRoute == route) return;
+        Navigator.of(context).pushReplacementNamed(route);
       },
     );
   }

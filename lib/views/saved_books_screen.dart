@@ -3,12 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_book/constants/firebase_constants.dart';
 import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/providers/firebase_provider.dart';
+import 'package:e_book/widgets/floating_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/image_app_bar.dart';
 
 class SavedBooksScreen extends StatefulWidget {
+  static const routeName = '/saved_books_screen';
+
   const SavedBooksScreen({Key? key}) : super(key: key);
 
   @override
@@ -36,6 +39,8 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: const FloatingNavigationBar(currentRoute: SavedBooksScreen.routeName),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Column(
         children: [
           const ImageAppBar(title: "Saved Books"),

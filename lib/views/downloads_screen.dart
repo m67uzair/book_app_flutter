@@ -1,12 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/controller/api_controller.dart';
+import 'package:e_book/widgets/floating_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/image_app_bar.dart';
 
 class DownloadsScreen extends StatefulWidget {
+  static const routeName = '/downloads_screen';
   const DownloadsScreen({Key? key}) : super(key: key);
 
   @override
@@ -35,6 +37,8 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: const FloatingNavigationBar(currentRoute: DownloadsScreen.routeName),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Column(
         children: [
           const ImageAppBar(title: "Downloads"),

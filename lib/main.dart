@@ -4,7 +4,9 @@ import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/providers/auth_provider.dart';
 import 'package:e_book/providers/firebase_provider.dart';
 import 'package:e_book/views/books_screen.dart';
+import 'package:e_book/views/downloads_screen.dart';
 import 'package:e_book/views/home_screen.dart';
+import 'package:e_book/views/saved_books_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,18 +55,24 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasData) {
-              return const BookScreen();
-            } else {
-              return const AuthPage();
-            }
-          },
-        ),
+        initialRoute: HomeScreen.routeName,
+        routes: {
+          HomeScreen.routeName: (context) => StreamBuilder<User?>(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData) {
+                    return const HomeScreen();
+                  } else {
+                    return const AuthPage();
+                  }
+                },
+              ),
+          BookScreen.routeName: (context) => const BookScreen(),
+          SavedBooksScreen.routeName: (context) => const SavedBooksScreen(),
+          DownloadsScreen.routeName: (context) => const DownloadsScreen()
+        },
       ),
     );
   }
