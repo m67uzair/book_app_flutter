@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/models/book_model.dart';
-import 'package:e_book/widgets/floating_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -44,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return AnnotatedRegion(
         value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         child: Scaffold(
-          floatingActionButton: const FloatingNavigationBar(currentRoute: HomeScreen.routeName),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          // floatingActionButton:  FloatingNavigationBar(currentRoute: HomeScreen.routeName),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           body: Column(
             children: [
               Stack(children: [

@@ -25,9 +25,9 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
 
   @override
   void initState() {
+    super.initState();
     savedBooksProvider = Provider.of<SavedBooksProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) => scrollToTop());
-    super.initState();
   }
 
   @override
@@ -39,8 +39,8 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: const FloatingNavigationBar(currentRoute: SavedBooksScreen.routeName),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+/*      floatingActionButton: const FloatingNavigationBar(currentRoute: SavedBooksScreen.routeName),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,*/
       body: Column(
         children: [
           const ImageAppBar(title: "Saved Books"),

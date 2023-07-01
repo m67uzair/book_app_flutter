@@ -3,9 +3,11 @@ import 'package:e_book/auth_page.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/providers/auth_provider.dart';
 import 'package:e_book/providers/firebase_provider.dart';
+import 'package:e_book/providers/navigation_provider.dart';
 import 'package:e_book/views/books_screen.dart';
 import 'package:e_book/views/downloads_screen.dart';
 import 'package:e_book/views/home_screen.dart';
+import 'package:e_book/views/main_screen.dart';
 import 'package:e_book/views/saved_books_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => SavedBooksProvider(firebaseFirestore: FirebaseFirestore.instance, prefs: prefs),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NavigationProvider(),
         )
       ],
       child: MaterialApp(
@@ -63,7 +68,7 @@ class MyApp extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasData) {
-                    return const HomeScreen();
+                    return const MainScreen();
                   } else {
                     return const AuthPage();
                   }

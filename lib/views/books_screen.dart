@@ -38,8 +38,8 @@ class _BookScreenState extends State<BookScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: const FloatingNavigationBar(currentRoute: BookScreen.routeName),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+   /*   floatingActionButton: const FloatingNavigationBar(currentRoute: BookScreen.routeName),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,*/
       body: Column(
         children: [
           const ImageAppBar(title: "Art & Entertainment"),

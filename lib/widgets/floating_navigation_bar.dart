@@ -6,10 +6,34 @@ import 'package:e_book/views/home_screen.dart';
 import 'package:e_book/views/saved_books_screen.dart';
 import 'package:flutter/material.dart';
 
-class FloatingNavigationBar extends StatefulWidget {
-  final String currentRoute;
+class NavBarButton extends BottomNavigationBarItem {
+  final IconData iconData;
+  final String label;
 
-  const FloatingNavigationBar({Key? key, required this.currentRoute}) : super(key: key);
+  NavBarButton({
+    required this.iconData,
+    required this.label,
+  }) : super(
+          icon: Icon(iconData),
+          label: label,
+        );
+}
+
+class FloatingNavigationBar extends StatefulWidget {
+  final List<NavBarButton> navBarButtons;
+  final int currentIndex;
+  final Function(int) onItemTapped;
+  final Color selectedItemColor;
+  final Color unSelectedItemColor;
+
+  const FloatingNavigationBar({
+    Key? key,
+    required this.navBarButtons,
+    required this.currentIndex,
+    required this.onItemTapped,
+    required this.selectedItemColor,
+    required this.unSelectedItemColor,
+  }) : super(key: key);
 
   @override
   State<FloatingNavigationBar> createState() => _FloatingNavigationBarState();
@@ -23,6 +47,7 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar> {
     final height = min(MediaQuery.of(context).size.height * 0.09, 60.0);
     final width =
         min(isExpanded ? MediaQuery.of(context).size.width * 0.6 : MediaQuery.of(context).size.width * 0.2, 200.0);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -39,30 +64,16 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar> {
             elevation: 4,
             child: Row(
               children: [
-                Expanded(
-                    child: NavbarButton(
-                  icon: Icons.home,
-                  route: HomeScreen.routeName,
-                  currentRoute: widget.currentRoute,
-                )),
-                Expanded(
-                    child: NavbarButton(
-                  icon: Icons.bookmark,
-                  route: SavedBooksScreen.routeName,
-                  currentRoute: widget.currentRoute,
-                )),
-                Expanded(
-                    child: NavbarButton(
-                  icon: Icons.local_library_sharp,
-                  route: BookScreen.routeName,
-                  currentRoute: widget.currentRoute,
-                )),
-                Expanded(
-                    child: NavbarButton(
-                  icon: Icons.download,
-                  route: DownloadsScreen.routeName,
-                  currentRoute: widget.currentRoute,
-                )),
+                for (var i = 0; i < widget.navBarButtons.length; i++)
+                  Expanded(
+                    child: IconButton(
+                      icon: widget.navBarButtons[i].icon,
+                      color: i == widget.currentIndex ? widget.selectedItemColor : widget.unSelectedItemColor,
+                      onPressed: () {
+                        widget.onItemTapped(i);
+                      },
+                    ),
+                  ),
               ],
             ),
           ),
@@ -90,27 +101,6 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class NavbarButton extends StatelessWidget {
-  final IconData icon;
-
-  final String route;
-  final String currentRoute;
-
-  NavbarButton({required this.icon, required this.route, required this.currentRoute});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(icon),
-      color: Color(0xff0DB067),
-      onPressed: () {
-        if (currentRoute == route) return;
-        Navigator.of(context).pushReplacementNamed(route);
-      },
     );
   }
 }

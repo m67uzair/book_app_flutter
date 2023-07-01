@@ -37,8 +37,8 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: const FloatingNavigationBar(currentRoute: DownloadsScreen.routeName),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+/*      floatingActionButton: const FloatingNavigationBar(currentRoute: DownloadsScreen.routeName),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,*/
       body: Column(
         children: [
           const ImageAppBar(title: "Downloads"),
