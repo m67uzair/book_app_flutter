@@ -1,3 +1,4 @@
+import 'package:e_book/views/search_screen.dart';
 import 'package:e_book/widgets/floating_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -24,16 +25,18 @@ class _MainScreenState extends State<MainScreen> {
 
   static List<Widget> navigationWidgets = [
     const HomeScreen(),
-    const BookScreen(),
+    BookScreen(),
     const SavedBooksScreen(),
+    SearchScreen(),
     const DownloadsScreen(),
   ];
 
   static List<NavBarButton> navBarButtons = [
     NavBarButton(iconData: Icons.home, label: "Home"),
-    NavBarButton(iconData: Icons.local_library_rounded, label: "Shop"),
-    NavBarButton(iconData: Icons.bookmark, label: "My Cart"),
-    NavBarButton(iconData: Icons.download, label: "Favorites"),
+    NavBarButton(iconData: Icons.local_library_rounded, label: "Library"),
+    NavBarButton(iconData: Icons.bookmark, label: "Saved Books"),
+    NavBarButton(iconData: Icons.search, label: "Search"),
+    NavBarButton(iconData: Icons.download, label: "Downloaded Books"),
   ];
 
   @override

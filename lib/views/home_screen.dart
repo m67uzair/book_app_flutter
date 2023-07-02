@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/models/book_model.dart';
+import 'package:e_book/views/books_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -43,8 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return AnnotatedRegion(
         value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         child: Scaffold(
-          // floatingActionButton:  FloatingNavigationBar(currentRoute: HomeScreen.routeName),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           body: Column(
             children: [
               Stack(children: [
@@ -146,27 +145,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                   maxCrossAxisExtent: MediaQuery.of(context).size.width / 3, mainAxisSpacing: 40),
                               delegate: SliverChildBuilderDelegate(
                                 childCount: categoriesList.length,
-                                (context, index) => Card(
-                                  elevation: 12,
-                                  margin: const EdgeInsets.all(10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(height: 48, width: 48, child: categoriesList[index]['icon']),
-                                        const SizedBox(height: 10),
-                                        Expanded(
-                                          child: AutoSizeText(
-                                            categoriesList[index]['title'],
-                                            style: kSubTitleStyle,
-                                            textAlign: TextAlign.center,
+                                (context, index) => InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => BookScreen(
+                                            category: categoriesList[index]['title'],
                                           ),
-                                        ),
-                                      ],
+                                        ));
+                                  },
+                                  child: Card(
+                                    elevation: 12,
+                                    margin: const EdgeInsets.all(10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(height: 48, width: 48, child: categoriesList[index]['icon']),
+                                          const SizedBox(height: 10),
+                                          Expanded(
+                                            child: AutoSizeText(
+                                              categoriesList[index]['title'],
+                                              style: kSubTitleStyle,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

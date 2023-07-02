@@ -1,9 +1,6 @@
 import 'dart:math';
 
-import 'package:e_book/views/books_screen.dart';
-import 'package:e_book/views/downloads_screen.dart';
-import 'package:e_book/views/home_screen.dart';
-import 'package:e_book/views/saved_books_screen.dart';
+
 import 'package:flutter/material.dart';
 
 class NavBarButton extends BottomNavigationBarItem {
