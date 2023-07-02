@@ -13,10 +13,10 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 NotificationHelper _notificationHelper = NotificationHelper();
 
 class BookScreen extends StatefulWidget {
-  static const routeName = '/books_screen';
-  String? category;
 
-  BookScreen({Key? key, this.category}) : super(key: key);
+  final String category;
+
+  const BookScreen({Key? key, required this.category}) : super(key: key);
 
   @override
   State<BookScreen> createState() => _BookScreenState();
@@ -39,10 +39,10 @@ class _BookScreenState extends State<BookScreen> {
     return Scaffold(
       body: Column(
         children: [
-          const ImageAppBar(title: "Search for books"),
+           ImageAppBar(category: 'CATEGORY',title: widget.category,),
           Consumer<ApiController>(builder: (context, apiProvider, child) {
             return FutureBuilder(
-              future: apiController.getBooksByQuery(),
+              future: apiController.getBooksByCategory(),
               builder: (BuildContext context, AsyncSnapshot<List<BookModel>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Expanded(

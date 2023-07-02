@@ -25,15 +25,13 @@ class _MainScreenState extends State<MainScreen> {
 
   static List<Widget> navigationWidgets = [
     const HomeScreen(),
-    BookScreen(),
     const SavedBooksScreen(),
-    SearchScreen(),
+    const SearchScreen(),
     const DownloadsScreen(),
   ];
 
   static List<NavBarButton> navBarButtons = [
     NavBarButton(iconData: Icons.home, label: "Home"),
-    NavBarButton(iconData: Icons.local_library_rounded, label: "Library"),
     NavBarButton(iconData: Icons.bookmark, label: "Saved Books"),
     NavBarButton(iconData: Icons.search, label: "Search"),
     NavBarButton(iconData: Icons.download, label: "Downloaded Books"),

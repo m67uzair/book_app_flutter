@@ -74,7 +74,6 @@ class MyApp extends StatelessWidget {
                   }
                 },
               ),
-          BookScreen.routeName: (context) =>  BookScreen(),
           SavedBooksScreen.routeName: (context) => const SavedBooksScreen(),
           DownloadsScreen.routeName: (context) => const DownloadsScreen()
         },

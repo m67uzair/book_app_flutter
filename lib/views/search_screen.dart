@@ -39,25 +39,18 @@ class _SearchScreenState extends State<SearchScreen> {
             return Expanded(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          autofocus: false,
-                          onChanged: (value) => apiProvider.setSearchQuery(value),
-                          decoration: const InputDecoration(
-                            hintText: 'Search...',
-                          ),
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: TextField(
+                      autofocus: false,
+                      enableSuggestions: true,
+                      onChanged: (value) => apiProvider.setSearchQuery(value),
+                      decoration: InputDecoration(
+                        suffixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                        hintText: 'Search...',
                       ),
-                      IconButton(
-                        onPressed: () {
-                          // Perform search using searchProvider.searchText
-                          // Example: apiController.getBooksByQuery(searchProvider.searchText)
-                        },
-                        icon: const Icon(Icons.search),
-                      ),
-                    ],
+                    ),
                   ),
                   FutureBuilder(
                     future: apiProvider.getBooksByQuery(),

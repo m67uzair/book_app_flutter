@@ -3,15 +3,19 @@ import 'package:e_book/constants/style_constants.dart';
 import 'package:flutter/material.dart';
 
 class ImageAppBar extends StatelessWidget {
+  final String? category;
   final String title;
 
   const ImageAppBar({
     super.key,
     required this.title,
+    this.category,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool showBackButton = Navigator.of(context).canPop();
+
     return Material(
       elevation: 2,
       child: Container(
@@ -21,36 +25,41 @@ class ImageAppBar extends StatelessWidget {
         child: Container(
           color: Colors.black45,
           child: Padding(
-            padding: EdgeInsets.only(right: 16, left: 16, top: 16),
+            padding: const EdgeInsets.only(right: 16, left: 16, top: 16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: showBackButton ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_sharp,
-                    color: Colors.white,
+                if (showBackButton)
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_sharp,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: showBackButton ? CrossAxisAlignment.end : CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
+                    // mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("CATEGORY", style: TextStyle(fontSize: 12, color: Colors.white)),
+                      if (category != null)
+                        Text(category ?? "", style: const TextStyle(fontSize: 12, color: Colors.white)),
                       const SizedBox(height: 5),
                       SizedBox(
-                        width: 120,
+                        width: showBackButton ? 120 : null,
                         child: AutoSizeText(
-                          title,
-                          textAlign: TextAlign.end,
+                          category == null ? title.toUpperCase() : title,
+                          textAlign: showBackButton ? TextAlign.end : null,
                           // softWrap: true,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           wrapWords: false,
-                          style: kSubTitleStyle.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                          style: category == null
+                              ? kSubTitleStyle.copyWith(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)
+                              : kSubTitleStyle.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
                     ],
