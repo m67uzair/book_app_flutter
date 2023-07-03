@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_book/auth_page.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/providers/auth_provider.dart';
+import 'package:e_book/providers/downloads_provider.dart';
 import 'package:e_book/providers/firebase_provider.dart';
 import 'package:e_book/providers/navigation_provider.dart';
 import 'package:e_book/views/books_screen.dart';
@@ -45,8 +46,9 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthProvider(firebaseAuth: FirebaseAuth.instance, prefs: prefs),
         ),
         ChangeNotifierProvider<ApiController>(
-          create: (_) => ApiController(prefs: prefs),
+          create: (_) => ApiController(),
         ),
+        ChangeNotifierProvider<DownloadsProvider>(create: (_) => DownloadsProvider(prefs: prefs)),
         ChangeNotifierProvider(
           create: (_) => SavedBooksProvider(firebaseFirestore: FirebaseFirestore.instance, prefs: prefs),
         ),

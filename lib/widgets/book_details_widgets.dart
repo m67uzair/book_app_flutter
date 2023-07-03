@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_book/constants/style_constants.dart';
 import 'package:e_book/controller/api_controller.dart';
 import 'package:e_book/models/book_model.dart';
+import 'package:e_book/providers/downloads_provider.dart';
 import 'package:e_book/providers/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,10 +28,13 @@ class BookDetailsSheet extends StatefulWidget {
 
 class _BookDetailsSheetState extends State<BookDetailsSheet> {
   late final ApiController apiController;
+  late final DownloadsProvider downloadsProvider;
 
   @override
   void initState() {
     apiController = Provider.of<ApiController>(context, listen: false);
+    downloadsProvider = Provider.of<DownloadsProvider>(context, listen: false);
+
     super.initState();
   }
 
@@ -230,7 +234,7 @@ class _BookDetailsSheetState extends State<BookDetailsSheet> {
                                   ),
                                   TextButton.icon(
                                     onPressed: () async {
-                                      await apiController.downloadBook(snapshot.data!.download!,
+                                      await downloadsProvider.downloadBook(snapshot.data!.download!,
                                           int.parse(snapshot.data!.id!), snapshot.data!.title!, snapshot.data!.image!);
                                     },
                                     icon: const Icon(Icons.download),

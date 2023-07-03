@@ -38,6 +38,15 @@ class SavedBooksProvider extends ChangeNotifier {
     return savedBooksStream;
   }
 
+  Future<int> getNumberOfBooksSaved() async {
+    return await firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .doc(prefs.getString(FirestoreConstants.userId))
+        .collection(FirestoreConstants.pathSavedCollection)
+        .snapshots()
+        .length;
+  }
+
   Future<void> removeBookFromSaved(String bookId) async {
     await firebaseFirestore
         .collection(FirestoreConstants.pathUserCollection)
